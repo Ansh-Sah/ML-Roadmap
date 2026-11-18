@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>ML Daily Routine</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #eef2f6;
+        --card: #fff;
+        --ink: #14213d;
+        --mute: #5b6b85;
+        --line: #d5dde8;
+        --acc: #2f5bea;
+        --ok: #1f8a5b;
+        --hi: #f2b134;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        color-scheme: light;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0f1624;
+          --card: #18223a;
+          --ink: #e6ecf7;
+          --mute: #98a6c0;
+          --line: #2a3652;
+          --acc: #7b9bff;
+          --ok: #4cc38a;
+          --hi: #f2b134;
+          color-scheme: dark;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0f1624;
+        --card: #18223a;
+        --ink: #e6ecf7;
+        --mute: #98a6c0;
+        --line: #2a3652;
+        --acc: #7b9bff;
+        --ok: #4cc38a;
+        --hi: #f2b134;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          16px/1.55 "IBM Plex Sans",
+          system-ui,
+          sans-serif;
+        background-image:
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: 32px 32px;
+        background-attachment: fixed;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0 0 auto;
+        height: env(safe-area-inset-top, 0px);
+        background: var(--bg);
+        z-index: 10;
+      }
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 20px 16px 48px;
+      }
+      h1,
+      h2,
+      .big {
+        font-family: "Bricolage Grotesque", system-ui, sans-serif;
+        margin: 0;
+      }
+      h1 {
+        font-size: clamp(30px, 6vw, 48px);
+        font-weight: 800;
+        line-height: 1.05;
+      }
+      h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .sub {
+        color: var(--mute);
+        margin: 6px 0 0;
+      }
+      .nav {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--acc);
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid var(--acc);
+        outline-offset: 2px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 16px;
+      }
+      @media (max-width: 800px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 16px;
+      }
+      .task {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+      }
+      .task:first-of-type {
+        border-top: 0;
+      }
+      .task input {
+        width: 20px;
+        height: 20px;
+        margin-top: 3px;
+        accent-color: var(--ok);
+        flex: none;
+      }
+      .task label {
+        flex: 1;
+        cursor: pointer;
+      }
+      .task.done label {
+        color: var(--mute);
+        text-decoration: line-through;
+      }
+      .min {
+        color: var(--mute);
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      .chal {
+        border-left: 6px solid var(--hi);
+      }
+      .chal p {
+        margin: 4px 0 12px;
+        font-size: 18px;
+      }
+      .bar {
+        height: 10px;
+        background: var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--ok);
+        transition: width 0.3s;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .stat .big {
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .stat span {
+        color: var(--mute);
+        font-size: 14px;
+      }
+      .map {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+      }
+      .cell {
+        aspect-ratio: 1;
+        border-radius: 4px;
+        border: 1px solid var(--line);
+        padding: 0;
+        font-size: 11px;
+        color: var(--mute);
+      }
+      .cell.p {
+        background: color-mix(in srgb, var(--ok) 40%, var(--card));
+      }
+      .cell.f {
+        background: var(--ok);
+        color: #fff;
+        border-color: var(--ok);
+      }
+      .cell.now {
+        outline: 2px solid var(--acc);
+      }
+      .cell.sel {
+        border-color: var(--acc);
+        border-width: 2px;
+      }
+      textarea,
+      input[type="date"] {
+        width: 100%;
+        font: inherit;
+        color: inherit;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+        color: var(--mute);
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="top">
+        <div>
+          <h1 id="title"></h1>
+          <p class="sub" id="sub"></p>
+        </div>
+        <div class="nav">
+          <button id="prev" aria-label="Previous day">‹ Prev</button
+          ><button id="today">Today</button
+          ><button id="next" aria-label="Next day">Next ›</button>
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <section class="card">
+            <h2>Today’s plan</h2>
+            <div class="bar" aria-hidden="true"><i id="dbar"></i></div>
+            <div id="tasks"></div>
+          </section>
+          <section class="card chal">
+            <h2>Daily coding challenge</h2>
+            <p id="chal"></p>
+            <div class="task" id="ctask"></div>
+            <div class="row">
+              Rules: no copy-paste, write it yourself, then test it with 3
+              inputs.
+            </div>
+          </section>
+          <section class="card">
+            <h2>What I learned today</h2>
+            <textarea
+              id="note"
+              rows="4"
+              placeholder="Three lines: what clicked, what confused you, what to revisit."
+            ></textarea>
+          </section>
+        </div>
+        <aside>
+          <section class="card">
+            <h2>Progress</h2>
+            <div class="bar" aria-hidden="true"><i id="obar"></i></div>
+            <div class="stats" style="margin-top: 14px">
+              <div class="stat">
+                <div class="big" id="s1"></div>
+                <span>overall</span>
+              </div>
+              <div class="stat">
+                <div class="big" id="s2"></div>
+                <span>day streak</span>
+              </div>
+              <div class="stat">
+                <div class="big" id="s3"></div>
+                <span>challenges solved</span>
+              </div>
+              <div class="stat">
+                <div class="big" id="s4"></div>
+                <span>hours studied</span>
+              </div>
+            </div>
+          </section>
+          <section class="card">
+            <h2>56-day map</h2>
+            <div class="map" id="map"></div>
+            <div class="row"><span>Day 1 start date</span></div>
+            <input type="date" id="start" aria-label="Start date" />
+          </section>
+        </aside>
+      </div>
+    </main>
+    <script>
+      const W = [
+        [
+          "Python & data toolkit",
+          "EDA report on a Kaggle dataset",
+          [
+            "NumPy arrays & broadcasting|NumPy quickstart;NumPy indexing guide|Normalize every column of a matrix with no loops",
+            "Vectorization|NumPy broadcasting docs;One blog on vectorizing code|Compute pairwise Euclidean distances between two point sets, no loops",
+            "Pandas basics|Pandas 10-minute guide|Load a CSV and list the top 5 groups by mean using groupby",
+            "Cleaning data|Pandas missing-data docs;Pandas dtypes guide|Write clean(df): impute, drop duplicates, fix dtypes",
+            "Visualizing data|Matplotlib quickstart|Draw a histogram and boxplot for every numeric column in one figure grid",
+          ],
+        ],
+        [
+          "Core machine learning",
+          "Predict house prices end to end",
+          [
+            "Linear regression|StatQuest linear regression;ISLR chapter 3 intro|Implement linear regression with gradient descent in NumPy",
+            "Overfitting & validation|Scikit-learn model evaluation guide;Bias-variance article|Write train_test_split from scratch with a seed",
+            "Logistic regression|StatQuest logistic regression;Scikit-learn linear models docs|Implement sigmoid and predict_proba for logistic regression",
+            "Metrics that matter|Scikit-learn metrics docs;ROC curve explainer|Compute a confusion matrix and F1 without scikit-learn",
+            "Pipelines|Scikit-learn Pipeline docs|Build scaler + model Pipeline and cross-validate it",
+          ],
+        ],
+        [
+          "Better models",
+          "Beat your baseline with trees and boosting",
+          [
+            "Decision trees|Visual intro to decision trees|Implement entropy and information gain for one split",
+            "Forests & boosting|StatQuest random forests;Gradient boosting intro|Compare RandomForest vs GradientBoosting with 5-fold CV",
+            "Feature engineering|One feature engineering article|Add 3 new features and measure the CV score change",
+            "Hyperparameter tuning|Scikit-learn RandomizedSearchCV docs|Tune a model and log the best params and score",
+            "Error analysis|Article on ML error analysis|List the 20 worst predictions and label why each failed",
+          ],
+        ],
+        [
+          "Unsupervised learning",
+          "Cluster and visualize a real dataset",
+          [
+            "K-means|Scikit-learn clustering docs;StatQuest k-means|Implement k-means in NumPy",
+            "PCA|StatQuest PCA;PCA explainer with SVD|Implement PCA via SVD and match scikit-learn",
+            "Visual embeddings|t-SNE or UMAP article|Plot a dataset in 2D with PCA and t-SNE side by side",
+            "Anomaly detection|Scikit-learn outlier detection docs|Flag outliers with IsolationForest and inspect the top 10",
+            "Project scoping|One Kaggle notebook you admire|Write problem statement, baseline and success metric",
+          ],
+        ],
+        [
+          "Deep learning with PyTorch",
+          "Train an MLP on tabular data",
+          [
+            "Tensors & autograd|PyTorch tensors tutorial;Autograd tutorial|Differentiate a custom function by hand and with autograd",
+            "Neural net from scratch|3Blue1Brown neural networks, ch.1–2|Write a 2-layer MLP forward and backward pass in NumPy",
+            "Training loop|PyTorch quickstart|Write a full train/eval loop that logs accuracy per epoch",
+            "Optimizers & regularization|Adam explained;Dropout explained|Plot SGD vs Adam learning curves on the same model",
+            "Debugging nets|Karpathy’s Recipe for Training Neural Networks|Overfit a single batch to near-zero loss",
+          ],
+        ],
+        [
+          "Convolutional networks",
+          "Image classifier with transfer learning",
+          [
+            "Convolutions|CS231n convolution notes|Write 2D convolution with loops, then vectorize it",
+            "CNN in PyTorch|PyTorch CNN tutorial|Train a CNN on Fashion-MNIST to above 90%",
+            "Augmentation|Torchvision transforms docs|Add augmentation and compare validation accuracy",
+            "Transfer learning|PyTorch transfer learning tutorial|Fine-tune ResNet18 on a small dataset",
+            "Interpreting models|Grad-CAM article|Plot 16 misclassified images with true and predicted labels",
+          ],
+        ],
+        [
+          "Sequences & transformers",
+          "Fine-tune a small text classifier",
+          [
+            "Embeddings|The Illustrated Word2vec|Find nearest neighbors of a word with cosine similarity",
+            "Attention|The Illustrated Attention|Implement scaled dot-product attention in NumPy",
+            "Transformers|The Illustrated Transformer|Implement multi-head attention in PyTorch",
+            "Hugging Face|HF course chapters 1–2|Run a sentiment pipeline, then fine-tune on a tiny set",
+            "Tokenization|HF tokenizers summary|Build a tiny byte-pair-encoding tokenizer",
+          ],
+        ],
+        [
+          "Deploy & final project",
+          "Ship the final AI project with an API",
+          [
+            "Saving models|PyTorch save and load docs|Save, reload and verify identical predictions",
+            "FastAPI|FastAPI tutorial: first steps|Build a /predict endpoint with request validation",
+            "Containers|Docker getting started|Containerize the API and call it with curl",
+            "Experiment tracking|MLflow or Weights & Biases quickstart|Log 3 runs and compare them",
+            "Final polish|Two great ML project READMEs|Write a README: results, limits, how to run",
+          ],
+        ],
+      ];
+      const N = 56,
+        K = "mlRoutineV1";
+      let S = { start: null, done: {}, notes: {} },
+        sel = 1;
+      try {
+        const r = localStorage.getItem(K);
+        if (r) S = Object.assign(S, JSON.parse(r));
+      } catch (e) {}
+      const iso = (d) => d.toISOString().slice(0, 10);
+      if (!S.start) S.start = iso(new Date());
+      const save = () => {
+        try {
+          localStorage.setItem(K, JSON.stringify(S));
+        } catch (e) {}
+      };
+      const $ = (id) => document.getElementById(id);
+      const cur = () =>
+        Math.min(
+          N,
+          Math.max(
+            1,
+            Math.floor(
+              (new Date(iso(new Date())) - new Date(S.start)) / 864e5,
+            ) + 1,
+          ),
+        );
+      function entry(d) {
+        const w = W[Math.floor((d - 1) / 7)],
+          i = (d - 1) % 7;
+        if (i < 5) {
+          const [t, r, c] = w[2][i].split("|");
+          return { w: w[0], t, r: r.split(";"), c, pr: w[1] };
+        }
+        if (i == 5)
+          return {
+            w: w[0],
+            t: "Project day",
+            r: [
+              "Revisit your 2 weakest topics",
+              "One blog or paper that interests you",
+            ],
+            c: "Ship one visible step of: " + w[1],
+            pr: w[1],
+          };
+        return {
+          w: w[0],
+          t: "Review & recap",
+          r: ["Reread your notes from this week", "Skim the week’s docs again"],
+          c: "Rewrite this week’s hardest function from memory, no peeking",
+          pr: w[1],
+        };
+      }
+      function tasks(d) {
+        const e = entry(d),
+          a = [];
+        e.r.forEach((x, j) =>
+          a.push({
+            k: d + ":r" + j,
+            l: "Read: " + x,
+            m: Math.round(50 / e.r.length),
+          }),
+        );
+        a.push(
+          { k: d + ":cd", l: "Code along: " + e.t, m: 60 },
+          { k: d + ":c", l: "Challenge: " + e.c, m: 60, ch: 1 },
+          { k: d + ":p", l: "Practice or work on " + e.pr, m: 30 },
+          { k: d + ":n", l: "Write your 3-line learning log", m: 10 },
+        );
+        return a;
+      }
+      const pct = (d) => {
+        const t = tasks(d);
+        return t.filter((x) => S.done[x.k]).length / t.length;
+      };
+      function render() {
+        const e = entry(sel),
+          t = tasks(sel),
+          c = cur();
+        $("title").textContent = "Day " + sel + " · " + e.t;
+        $("sub").textContent =
+          "Week " +
+          (Math.floor((sel - 1) / 7) + 1) +
+          ": " +
+          e.w +
+          " · about " +
+          t.reduce((s, x) => s + x.m, 0) / 60 +
+          " hours · " +
+          e.r.length +
+          " things to read";
+        $("tasks").innerHTML = t
+          .filter((x) => !x.ch)
+          .map(row)
+          .join("");
+        $("ctask").innerHTML = row(t.find((x) => x.ch)).replace(
+          "Challenge: ",
+          "Solved it",
+        );
+        $("chal").textContent = e.c;
+        $("dbar").style.width = pct(sel) * 100 + "%";
+        $("note").value = S.notes[sel] || "";
+        let ds = 0,
+          ch = 0,
+          mins = 0,
+          tot = 0;
+        for (let d = 1; d <= N; d++) {
+          const p = pct(d);
+          tot += p;
+          tasks(d).forEach((x) => {
+            if (S.done[x.k]) {
+              mins += x.m;
+              if (x.ch) ch++;
+            }
+          });
+        }
+        let st = 0;
+        for (let d = Math.min(c, N); d >= 1; d--) {
+          if (pct(d) == 1) st++;
+          else if (d < c) break;
+        }
+        $("s1").textContent = Math.round((tot / N) * 100) + "%";
+        $("obar").style.width = (tot / N) * 100 + "%";
+        $("s2").textContent = st;
+        $("s3").textContent = ch + "/" + N;
+        $("s4").textContent = (mins / 60).toFixed(1);
+        $("map").innerHTML = Array.from({ length: N }, (_, i) => {
+          const d = i + 1,
+            p = pct(d);
+          return `<button class="cell ${p == 1 ? "f" : p > 0 ? "p" : ""} ${d == c ? "now" : ""} ${d == sel ? "sel" : ""}" data-d="${d}" aria-label="Day ${d}">${d}</button>`;
+        }).join("");
+        $("start").value = S.start;
+      }
+      function row(x) {
+        return `<div class="task ${S.done[x.k] ? "done" : ""}"><input type="checkbox" id="${x.k}" data-k="${x.k}" ${S.done[x.k] ? "checked" : ""}><label for="${x.k}">${x.l}</label><span class="min">${x.m} min</span></div>`;
+      }
+      document.addEventListener("change", (ev) => {
+        const k = ev.target.dataset && ev.target.dataset.k;
+        if (k) {
+          S.done[k] = ev.target.checked;
+          save();
+          render();
+        }
+      });
+      $("map").onclick = (ev) => {
+        const d = ev.target.dataset.d;
+        if (d) {
+          sel = +d;
+          render();
+        }
+      };
+      $("prev").onclick = () => {
+        sel = Math.max(1, sel - 1);
+        render();
+      };
+      $("next").onclick = () => {
+        sel = Math.min(N, sel + 1);
+        render();
+      };
+      $("today").onclick = () => {
+        sel = cur();
+        render();
+      };
+      $("note").oninput = (ev) => {
+        S.notes[sel] = ev.target.value;
+        save();
+      };
+      $("start").onchange = (ev) => {
+        if (ev.target.value) {
+          S.start = ev.target.value;
+          sel = cur();
+          save();
+          render();
+        }
+      };
+      sel = cur();
+      render();
+    </script>
+  </body>
+</html>
