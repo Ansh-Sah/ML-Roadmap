@@ -252,6 +252,16 @@
         border-radius: 8px;
         padding: 10px;
       }
+      .ph p {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin: 12px 0 4px;
+        font-size: 14px;
+      }
+      .ph p:first-child {
+        margin-top: 0;
+      }
       .row {
         display: flex;
         gap: 8px;
@@ -325,7 +335,11 @@
             </div>
           </section>
           <section class="card">
-            <h2>56-day map</h2>
+            <h2>Phases</h2>
+            <div id="ph" class="ph"></div>
+          </section>
+          <section class="card">
+            <h2>112-day map</h2>
             <div class="map" id="map"></div>
             <div class="row"><span>Day 1 start date</span></div>
             <input type="date" id="start" aria-label="Start date" />
@@ -354,7 +368,7 @@
             "Overfitting & validation|Scikit-learn model evaluation guide;Bias-variance article|Write train_test_split from scratch with a seed",
             "Logistic regression|StatQuest logistic regression;Scikit-learn linear models docs|Implement sigmoid and predict_proba for logistic regression",
             "Metrics that matter|Scikit-learn metrics docs;ROC curve explainer|Compute a confusion matrix and F1 without scikit-learn",
-            "Pipelines|Scikit-learn Pipeline docs|Build scaler + model Pipeline and cross-validate it",
+            "Pipelines|Scikit-learn Pipeline docs|Build a scaler + model Pipeline and cross-validate it",
           ],
         ],
         [
@@ -376,40 +390,128 @@
             "PCA|StatQuest PCA;PCA explainer with SVD|Implement PCA via SVD and match scikit-learn",
             "Visual embeddings|t-SNE or UMAP article|Plot a dataset in 2D with PCA and t-SNE side by side",
             "Anomaly detection|Scikit-learn outlier detection docs|Flag outliers with IsolationForest and inspect the top 10",
-            "Project scoping|One Kaggle notebook you admire|Write problem statement, baseline and success metric",
+            "Hierarchical clustering|Scikit-learn agglomerative clustering docs|Cut a dendrogram at 3 levels and compare with k-means",
           ],
         ],
         [
-          "Deep learning with PyTorch",
+          "Probability & classical algorithms",
+          "Spam classifier with Naive Bayes",
+          [
+            "Probability basics|Khan Academy probability intro;Probability vs likelihood explainer|Simulate 10,000 dice rolls and check the expected value",
+            "Bayes & Naive Bayes|StatQuest Naive Bayes;Scikit-learn Naive Bayes docs|Implement Gaussian Naive Bayes from scratch",
+            "k-NN|Scikit-learn neighbors docs|Implement k-NN with your own distance function",
+            "Support vector machines|StatQuest SVM;Scikit-learn SVM docs|Compare linear vs RBF SVM on a nonlinear dataset",
+            "Statistics for ML|Confidence intervals explainer|Compare two models using a paired bootstrap test",
+          ],
+        ],
+        [
+          "NLP & recommenders",
+          "Movie recommender from ratings data",
+          [
+            "Text features & TF-IDF|Scikit-learn text feature extraction docs|Build TF-IDF from scratch for 5 short documents",
+            "Text classification|Scikit-learn text classification tutorial|Train a news-topic classifier and report F1",
+            "Content-based recommenders|Intro to recommender systems article|Recommend 5 similar items using cosine similarity",
+            "Collaborative filtering|Matrix factorization for recommenders|Factorize a ratings matrix with SVD and predict one rating",
+            "Search & ranking|Intro to BM25 ranking|Rank documents for a query with BM25",
+          ],
+        ],
+        [
+          "ML engineering",
+          "Imbalanced churn model with explanations",
+          [
+            "Imbalanced data|Imbalanced-learn user guide|Compare class weights vs oversampling on one dataset",
+            "Time series|Forecasting: Principles and Practice, intro chapters|Build a lag-feature forecast and beat a naive baseline",
+            "Interpretability|SHAP introduction;Permutation importance docs|Explain one prediction with SHAP and one with permutation importance",
+            "Data leakage|Article on data leakage in ML|Plant a leakage bug in your own pipeline, then find and fix it",
+            "Reproducible code|Article on structuring ML projects|Refactor a notebook into a src/ module with a train.py",
+          ],
+        ],
+        [
+          "AI/ML capstone",
+          "Complete ML project with a written report",
+          [
+            "Frame the problem|Browse Kaggle datasets and Papers With Code|Write a one-page brief: problem, data, metric",
+            "Baseline first|Article on strong baselines|Build and log a simple baseline model",
+            "Run experiments|Experiment tracking best practices|Run 3 experiments and record the score of each",
+            "Evaluate & explain|Model evaluation checklist|Produce error analysis plus feature importance",
+            "Write it up|Two well-written ML project READMEs|Write the report: problem, data, results, limits",
+          ],
+        ],
+        [
+          "Neural networks & PyTorch",
           "Train an MLP on tabular data",
           [
             "Tensors & autograd|PyTorch tensors tutorial;Autograd tutorial|Differentiate a custom function by hand and with autograd",
             "Neural net from scratch|3Blue1Brown neural networks, ch.1–2|Write a 2-layer MLP forward and backward pass in NumPy",
-            "Training loop|PyTorch quickstart|Write a full train/eval loop that logs accuracy per epoch",
-            "Optimizers & regularization|Adam explained;Dropout explained|Plot SGD vs Adam learning curves on the same model",
+            "The training loop|PyTorch quickstart|Write a full train/eval loop that logs accuracy per epoch",
+            "Datasets & DataLoaders|PyTorch data loading tutorial|Write a custom Dataset and DataLoader for a CSV",
             "Debugging nets|Karpathy’s Recipe for Training Neural Networks|Overfit a single batch to near-zero loss",
           ],
         ],
         [
+          "Training deep nets well",
+          "Beat your MLP baseline with better training",
+          [
+            "Optimizers|Overview of gradient descent optimizers|Plot SGD vs Adam learning curves on one model",
+            "Regularization|Dropout and weight decay explainers|Add dropout and weight decay, compare validation loss",
+            "Normalization & init|BatchNorm explained;Xavier and He initialization|Train with and without BatchNorm and compare",
+            "Learning-rate schedules|PyTorch lr_scheduler docs|Implement one-cycle LR and plot the loss",
+            "Experiment hygiene|TensorBoard quickstart|Log loss curves for 3 runs and pick the best",
+          ],
+        ],
+        [
           "Convolutional networks",
-          "Image classifier with transfer learning",
+          "Image classifier built from scratch",
           [
             "Convolutions|CS231n convolution notes|Write 2D convolution with loops, then vectorize it",
             "CNN in PyTorch|PyTorch CNN tutorial|Train a CNN on Fashion-MNIST to above 90%",
             "Augmentation|Torchvision transforms docs|Add augmentation and compare validation accuracy",
-            "Transfer learning|PyTorch transfer learning tutorial|Fine-tune ResNet18 on a small dataset",
-            "Interpreting models|Grad-CAM article|Plot 16 misclassified images with true and predicted labels",
+            "Classic architectures|ResNet explainer;VGG vs ResNet comparison|Implement a residual block and test it",
+            "Interpreting CNNs|Grad-CAM article|Plot 16 misclassified images with true and predicted labels",
           ],
         ],
         [
-          "Sequences & transformers",
-          "Fine-tune a small text classifier",
+          "Modern computer vision",
+          "Fine-tune a model on your own images",
+          [
+            "Transfer learning|PyTorch transfer learning tutorial|Fine-tune ResNet18 on a small dataset",
+            "Object detection|YOLO overview article|Run a pretrained detector and draw boxes on 5 photos",
+            "Segmentation|U-Net explainer|Overlay a predicted mask on an image",
+            "Vision transformers|Illustrated ViT or ViT overview|Compare a ViT and a CNN on the same small dataset",
+            "Vision error analysis|Article on debugging vision models|Group 30 failures into causes and fix one",
+          ],
+        ],
+        [
+          "Sequence models",
+          "Sentiment or text-generation model",
           [
             "Embeddings|The Illustrated Word2vec|Find nearest neighbors of a word with cosine similarity",
-            "Attention|The Illustrated Attention|Implement scaled dot-product attention in NumPy",
-            "Transformers|The Illustrated Transformer|Implement multi-head attention in PyTorch",
-            "Hugging Face|HF course chapters 1–2|Run a sentiment pipeline, then fine-tune on a tiny set",
-            "Tokenization|HF tokenizers summary|Build a tiny byte-pair-encoding tokenizer",
+            "RNNs|Karpathy’s Unreasonable Effectiveness of RNNs|Train a character-level RNN on a small text file",
+            "LSTM & GRU|Understanding LSTMs article|Swap the RNN for an LSTM and compare loss",
+            "Batching sequences|PyTorch padding and packing docs|Write a collate function that pads variable-length text",
+            "Seq2seq & attention|The Illustrated Attention|Implement scaled dot-product attention in NumPy",
+          ],
+        ],
+        [
+          "Transformers & NLP",
+          "Fine-tune a transformer classifier",
+          [
+            "Self-attention|The Illustrated Transformer|Implement multi-head attention in PyTorch",
+            "Transformer block|Annotated Transformer, first sections|Assemble attention, MLP and residuals into one block",
+            "Tokenization|Hugging Face tokenizers summary|Build a tiny byte-pair-encoding tokenizer",
+            "Hugging Face fine-tuning|HF course chapters 1–3|Fine-tune a small model on a labeled text dataset",
+            "Evaluating NLP models|Article on NLP evaluation metrics|Report accuracy and F1, and review 20 wrong predictions",
+          ],
+        ],
+        [
+          "Generative models & LLM apps",
+          "Mini document question-answering app",
+          [
+            "Autoencoders|Autoencoder tutorial|Train an autoencoder and plot reconstructions",
+            "GANs|Intro to GANs article|Sketch the generator and discriminator losses in code",
+            "Diffusion models|Illustrated Stable Diffusion|Add noise to an image over 10 steps and plot them",
+            "LLM prompting & APIs|Prompt engineering guide|Write a script that calls an LLM and parses a JSON answer",
+            "Retrieval (RAG)|Intro to retrieval-augmented generation|Embed 20 paragraphs and retrieve the top 3 for a query",
           ],
         ],
         [
@@ -424,8 +526,8 @@
           ],
         ],
       ];
-      const N = 56,
-        K = "mlRoutineV1";
+      const N = 112,
+        K = "mlRoutineV2";
       let S = { start: null, done: {}, notes: {} },
         sel = 1;
       try {
@@ -504,7 +606,8 @@
           c = cur();
         $("title").textContent = "Day " + sel + " · " + e.t;
         $("sub").textContent =
-          "Week " +
+          (sel > 56 ? "Deep learning" : "AI & ML") +
+          " · Week " +
           (Math.floor((sel - 1) / 7) + 1) +
           ": " +
           e.w +
@@ -548,6 +651,17 @@
         $("s2").textContent = st;
         $("s3").textContent = ch + "/" + N;
         $("s4").textContent = (mins / 60).toFixed(1);
+        $("ph").innerHTML = [
+          ["Part 1 · AI & machine learning (weeks 1–8)", 1, 56],
+          ["Part 2 · Deep learning (weeks 9–16)", 57, 112],
+        ]
+          .map(([n, x, y]) => {
+            let q = 0;
+            for (let d = x; d <= y; d++) q += pct(d);
+            q = (q / (y - x + 1)) * 100;
+            return `<p><span>${n}</span><b>${Math.round(q)}%</b></p><div class="bar"><i style="width:${q}%"></i></div>`;
+          })
+          .join("");
         $("map").innerHTML = Array.from({ length: N }, (_, i) => {
           const d = i + 1,
             p = pct(d);

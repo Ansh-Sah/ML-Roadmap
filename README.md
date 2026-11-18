@@ -1,6 +1,6 @@
 # ML Daily Routine
 
-A single-page app for a 56-day ML engineering plan: daily routine, reading list, coding challenge, and progress tracking. No build step, no dependencies. Progress is saved in your browser (localStorage).
+A single-page app for a 112-day plan in two parts: AI & machine learning (weeks 1–8), then deep learning (weeks 9–16). Each day has a routine, reading list, coding challenge, and progress tracking. No build step, no dependencies. Progress is saved in your browser (localStorage).
 
 ## Run locally
 
